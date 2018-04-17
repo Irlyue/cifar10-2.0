@@ -1,4 +1,5 @@
 import os
+import json
 import pickle
 import logging
 
@@ -35,6 +36,10 @@ def dump_obj(obj, path):
 def download_small_file(src, dst):
     with urlopen(src) as remote, open(dst, 'wb') as local:
         local.write(remote.read())
+
+
+def json_out(obj):
+    return json.dumps(obj, indent=2)
 
 
 DEFAULT_LOGGER = None

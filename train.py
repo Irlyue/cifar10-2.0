@@ -4,9 +4,11 @@ import tensorflow as tf
 from experiment import Experiment
 
 parser = mu.get_default_parser()
+logger = mu.get_default_logger()
 
 
 def main():
+    logger.info('\n%s\n', mu.json_out(config.state))
     experiment = Experiment(config)
     experiment.train()
 
