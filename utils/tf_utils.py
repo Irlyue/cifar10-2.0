@@ -74,3 +74,9 @@ def delete_if_exists(path):
     if tf.gfile.Exists(path):
         tf.gfile.DeleteRecursively(path)
 
+
+def load_run_config():
+    session_config = tf.ConfigProto(gpu_options={'allow_growth': True})
+    config = tf.estimator.RunConfig(session_config=session_config)
+    return config
+

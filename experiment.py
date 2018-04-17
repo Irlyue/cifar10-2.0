@@ -58,7 +58,8 @@ class Experiment:
         if self.__estimator is not None:
             return self.__estimator
         model_fn = Model()
-        est = tf.estimator.Estimator(model_fn, model_dir=self.config.model_dir, params=self.config)
+        run_config = mu.load_run_config()
+        est = tf.estimator.Estimator(model_fn, model_dir=self.config.model_dir, params=self.config, config=run_config)
         self.__estimator = est
         return self.__estimator
 
