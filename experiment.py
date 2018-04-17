@@ -40,7 +40,7 @@ class Experiment:
         with mu.Timer() as timer:
             result = self.estimator.evaluate(self.get_input_fn(self.config.eval_data), checkpoint_path=ckpt_path)
 
-        result['data'] = self.mode
+        result['data'] = self.config.eval_data
         logger.info('Done in %.fs', timer.eclipsed)
         logger.info('\n%s%s%s\n', '*'*10, result, '*'*10)
 
