@@ -20,14 +20,15 @@ class Model:
             pass
 
         loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
+        accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
         if mode == tf.estimator.ModeKeys.EVAL:
             metrics = {
-                'accuracy': tf.metrics.accuracy(labels=labels,
-                                                predictions=output)
+                'accuracy': accuracy
             }
             return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)
 
         if mode == tf.estimator.ModeKeys.TRAIN:
+            tf.summary.scalar('accuracy', accuracy[1])
             solver = tf.train.AdamOptimizer(self.params.lr)
             with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
                 train_op = solver.minimize(loss, global_step=global_step)
