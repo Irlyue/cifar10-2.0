@@ -44,14 +44,16 @@ class Model:
     def inference(self):
         images = self.endpoints['images']
         with slim.arg_scope(mu.default_arg_scope()):
+            # with slim.arg_scope([slim.batch_norm], is_training=True):
             with slim.arg_scope([slim.batch_norm], is_training=(self.mode == tf.estimator.ModeKeys.TRAIN)):
                 net = slim.conv2d(images, 16, 5, scope='conv0')
                 net = slim.max_pool2d(net, 3, 2, scope='pool0')
-                net = mu.res_block(net, filters=[16, 16], scope='block1', repeat=3)
+                net = mu.res_block(net, filters=[32, 32], scope='block1', repeat=3)
                 net = slim.max_pool2d(net, 2, 2, scope='pool1')
-                net = mu.res_block(net, filters=[32, 32], scope='block2', repeat=3)
+                net = mu.res_block(net, filters=[64, 64], scope='block2', repeat=4)
                 net = slim.max_pool2d(net, 2, 2, scope='pool2')
-                net = mu.res_block(net, filters=[64, 64], scope='block3', repeat=3)
+                net = mu.res_block(net, filters=[128, 128], scope='block3', repeat=4)
+                net = mu.res_block(net, filters=[256, 256], scope='block4', repeat=3)
                 net = tf.reduce_mean(net, axis=(1, 2), name='GAP')
                 net = slim.fully_connected(net, self.params.n_classes, activation_fn=None)
                 return net
