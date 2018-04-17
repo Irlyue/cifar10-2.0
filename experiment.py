@@ -14,9 +14,9 @@ class Experiment:
         self.mode = ''
         self.__estimator = None
 
-    def get_input_fn(self):
+    def get_input_fn(self, data='train'):
         config = self.config
-        input_fn = Cifar10InputFunction(type=self.mode,
+        input_fn = Cifar10InputFunction(type=data,
                                         batch_size=config.batch_size,
                                         n_epochs=config.n_epochs,
                                         base_dir=config.data_dir)
@@ -38,7 +38,7 @@ class Experiment:
     def eval(self, ckpt_path=None):
         self.switch_to_eval()
         with mu.Timer() as timer:
-            result = self.estimator.evaluate(self.get_input_fn(), checkpoint_path=ckpt_path)
+            result = self.estimator.evaluate(self.get_input_fn(self.config.eval_data), checkpoint_path=ckpt_path)
 
         result['data'] = self.mode
         logger.info('Done in %.fs', timer.eclipsed)

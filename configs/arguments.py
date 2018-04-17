@@ -29,6 +29,11 @@ def add_arg(func):
 #       Customized Arguments        #
 #####################################
 @add_arg
+def eval_data():
+    Argument('--eval_data', default='eval', type=str, help='data to evaluate')
+
+
+@add_arg
 def learning_rate():
     Argument('--lr', default=1e-3, type=float, help='learning rate')
 
