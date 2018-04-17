@@ -43,7 +43,7 @@ class Model:
     def inference(self):
         images = self.endpoints['images']
         with slim.arg_scope(mu.default_arg_scope()):
-            with slim.arg_scope([slim.batch_norm], is_training=(self.mode == 'train')):
+            with slim.arg_scope([slim.batch_norm], is_training=(self.mode == tf.estimator.ModeKeys.TRAIN)):
                 net = slim.conv2d(images, 16, 5, scope='conv0')
                 net = slim.max_pool2d(net, 3, 2, scope='pool0')
                 net = mu.res_block(net, filters=[16, 16], scope='block1', repeat=3)
