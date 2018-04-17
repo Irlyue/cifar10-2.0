@@ -34,7 +34,7 @@ def default_arg_scope(weight_decay=0.0001,
         'epsilon': batch_norm_epsilon,
         'scale': batch_norm_scale,
         'updates_collections': None,
-        'fused': True,  # Use fused batch norm if possible.
+        'fused': None,  # Use fused batch norm if possible.
     }
 
     with slim.arg_scope(
