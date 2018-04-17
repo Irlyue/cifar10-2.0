@@ -15,6 +15,8 @@ class Cifar10InputFunction:
 
         fmt = mu.path_join(base_dir, 'cifar-10-batches-bin/data_batch_{}.bin')
         self.filenames = [fmt.format(i) for i in range(1, 6)]
+        if self.type == 'eval':
+            self.filenames = [mu.path_join(base_dir, 'cifar-10-batches-bin/test_batch.bin')]
 
     def __call__(self):
         label_bytes = 1
