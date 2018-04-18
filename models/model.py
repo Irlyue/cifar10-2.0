@@ -22,7 +22,12 @@ class Model:
         reg_loss = tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES), name='reg_loss')
         data_loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits, scope='data_loss')
         loss = tf.add(reg_loss, data_loss, name='total_loss')
-        accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
+        ##################
+        #     metrics    #
+        ##################
+        with tf.name_scope('accuracy'):
+            accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
+
         if mode == tf.estimator.ModeKeys.EVAL:
             metrics = {
                 'accuracy': accuracy
