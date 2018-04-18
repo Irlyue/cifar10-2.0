@@ -25,8 +25,9 @@ class Model:
         ##################
         #     metrics    #
         ##################
-        with tf.name_scope('accuracy'):
-            accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
+        with tf.name_scope('metrics'):
+            with tf.name_scope('accuracy'):
+                accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
 
         if mode == tf.estimator.ModeKeys.EVAL:
             metrics = {
