@@ -45,6 +45,11 @@ class Model:
             tf.summary.scalar('metric/accuracy', accuracy[1])
             tf.summary.scalar('lr', self.params.lr)
 
+            with tf.variable_scope('variable_moving_average'):
+                variable_averages = tf.train.ExponentialMovingAverage(0.99, tf.train.get_or_create_global_step())
+                average_op = variable_averages.apply(tf.trainable_variables())
+                tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, average_op)
+
             solver = tf.train.AdamOptimizer(self.params.lr)
             with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
                 train_op = solver.minimize(loss, global_step=global_step)

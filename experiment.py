@@ -3,6 +3,7 @@ import tensorflow as tf
 
 from models.model import Model
 from inputs.data_gen import Cifar10InputFunction
+from models.tf_hooks import RestoreMovingAverageHook
 
 
 logger = mu.get_default_logger()
@@ -37,8 +38,14 @@ class Experiment:
 
     def eval(self, ckpt_path=None):
         self.switch_to_eval()
+
+        eval_hooks = [RestoreMovingAverageHook(ckpt_path=ckpt_path)]
+        if self.config.disable_moving_average:
+            eval_hooks = []
         with mu.Timer() as timer:
-            result = self.estimator.evaluate(self.get_input_fn(self.config.eval_data), checkpoint_path=ckpt_path)
+            result = self.estimator.evaluate(self.get_input_fn(self.config.eval_data),
+                                             checkpoint_path=ckpt_path,
+                                             hooks=eval_hooks)
 
         result['data'] = self.config.eval_data
         logger.info('Done in %.fs', timer.eclipsed)
