@@ -92,6 +92,12 @@ def reg():
              help='regularization strength')
 
 
+@add_arg
+def disable_moving_average():
+    Argument('--disable_moving_average', action='store_true',
+             help='regularization strength')
+
+
 def get_default_parser():
     Argument.set_parser(argparse.ArgumentParser())
     for cls in ARGUMENTS:
