@@ -33,7 +33,7 @@ def default_arg_scope(weight_decay=0.0001,
         'decay': batch_norm_decay,
         'epsilon': batch_norm_epsilon,
         'scale': batch_norm_scale,
-        'updates_collections': None,
+        'updates_collections': tf.GraphKeys.UPDATE_OPS,
         'fused': None,  # Use fused batch norm if possible.
     }
 
