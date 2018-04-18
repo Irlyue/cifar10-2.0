@@ -35,7 +35,15 @@ class Model:
             return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)
 
         if mode == tf.estimator.ModeKeys.TRAIN:
-            tf.summary.scalar('accuracy', accuracy[1])
+            ################
+            #   summary    #
+            ################
+            tf.summary.scalar('loss/data_loss', data_loss)
+            tf.summary.scalar('loss/reg_loss', reg_loss)
+            tf.summary.scalar('loss/total_loss', loss)
+            tf.summary.scalar('metric/accuracy', accuracy[1])
+            tf.summary.scalar('lr', self.params.lr)
+
             solver = tf.train.AdamOptimizer(self.params.lr)
             with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
                 train_op = solver.minimize(loss, global_step=global_step)
