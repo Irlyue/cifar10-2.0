@@ -19,7 +19,9 @@ class Model:
         if mode == tf.estimator.ModeKeys.PREDICT:
             pass
 
-        loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
+        reg_loss = tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES), name='reg_loss')
+        data_loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits, scope='data_loss')
+        loss = tf.add(reg_loss, data_loss, name='total_loss')
         accuracy = tf.metrics.accuracy(labels=labels, predictions=output)
         if mode == tf.estimator.ModeKeys.EVAL:
             metrics = {
@@ -43,7 +45,7 @@ class Model:
 
     def inference(self):
         images = self.endpoints['images']
-        with slim.arg_scope(mu.default_arg_scope()):
+        with slim.arg_scope(mu.default_arg_scope(weight_decay=self.params.reg)):
             # with slim.arg_scope([slim.batch_norm], is_training=True):
             with slim.arg_scope([slim.batch_norm], is_training=(self.mode == tf.estimator.ModeKeys.TRAIN)):
                 net = slim.conv2d(images, 16, 5, scope='conv0')

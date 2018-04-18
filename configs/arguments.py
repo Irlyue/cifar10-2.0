@@ -86,6 +86,12 @@ def n_classes():
              help='number of classes')
 
 
+@add_arg
+def reg():
+    Argument('--reg', default=1e-4, type=float,
+             help='regularization strength')
+
+
 def get_default_parser():
     Argument.set_parser(argparse.ArgumentParser())
     for cls in ARGUMENTS:
